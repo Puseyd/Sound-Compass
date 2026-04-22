@@ -13,7 +13,11 @@ const int analogPin3 = A4;
 const int analogPin4 = A5;
 
 
-const int LedPins[4] = { 9, 10, 11, 12 };  // N, E, S, W respectively
+const int cardinalPins[4] = {5, 7, 9, 11};  // N, E, S, W respectively
+const int NEPin = 6;
+const int SEPin = 8;
+const int SWPin = 10;
+const int NWPin = 12;
 const int threshold = 390;
 
 int N = 0;  //sensorVal1
@@ -21,7 +25,6 @@ int E = 0;  //sensorVal2
 int S = 0;  //sensorVal3
 int W = 0;  //sensorVal4
 
-int sensorMax = 0;
 int sensArr[4] =  {0, 0, 0, 0 };  //Instantiate the array to 0 to avoid garbage values populating.
 
 void setup() {
@@ -32,9 +35,13 @@ void setup() {
   pinMode(analogPin4, INPUT);
 
   for (int i = 0; i < 4; i++) {
-    pinMode(LedPins[i], OUTPUT);
+    pinMode(cardinalPins[i], OUTPUT);
   }
 
+  pinMode(NEPin, OUTPUT);
+  pinMode(SEPin, OUTPUT);
+  pinMode(SWPin, OUTPUT);
+  pinMode(NWPin, OUTPUT);
 
   Serial.begin(9600);
 
@@ -68,12 +75,33 @@ void loop() {
 
   for (int i = 0; i < 4; i++) {
     if (sensArr[i] > avg) {
-      digitalWrite(LedPins[i], HIGH);
+      digitalWrite(cardinalPins[i], HIGH);
 
     } else {
-      digitalWrite(LedPins[i], LOW);
+      digitalWrite(cardinalPins[i], LOW);
     }
   }
 
-  delay(50);
+  if ((sensArr[0] > avg) && (sensArr[1] > avg)) {
+    digitalWrite(NEPin, HIGH);
+  } else {
+    digitalWrite(NEPin, LOW);
+  }
+  if ((sensArr[1] > avg) && (sensArr[2] > avg)) {
+    digitalWrite(SEPin, HIGH);
+  } else {
+    digitalWrite(SEPin, LOW);
+  }
+  if ((sensArr[2] > avg) && (sensArr[3] > avg)) {
+    digitalWrite(SWPin, HIGH);
+  } else {
+    digitalWrite(SWPin, LOW);
+  }
+  if ((sensArr[3] > avg) && (sensArr[0] > avg)) {
+    digitalWrite(NWPin, HIGH);
+  } else {
+    digitalWrite(NWPin, LOW);
+  }
+
+  delay(1000);
 }
