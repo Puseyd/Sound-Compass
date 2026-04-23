@@ -6,7 +6,6 @@ Third iteration of the sound compass.
 
 */
 
-
 const int analogPin1 = A2;
 const int analogPin2 = A3;  //Possibly add a space bewteen the variable name and the bracket
 const int analogPin3 = A4;
@@ -25,7 +24,7 @@ int E = 0;  //sensorVal2
 int S = 0;  //sensorVal3
 int W = 0;  //sensorVal4
 
-int sensArr[4] =  {0, 0, 0, 0 };  //Instantiate the array to 0 to avoid garbage values populating.
+int sensArr[4] =  {0, 0, 0, 0};  //Instantiate the array to 0 to avoid garbage values populating.
 
 void setup() {
 
@@ -51,6 +50,17 @@ void setup() {
   //Serial.println(max);
 }
 
+//Params: int pin: intercardinal pin
+//         int a: first cardinal direction
+//         int b: second cardinal direction
+//         float avg: average of all the sensor readings
+/*
+void setDiagLED(int pin, int a, int b, float avg) {
+  digitalWrite(pin, (sensArr[a] > avg && sensArr[b] > avg) ? HIGH : LOW);
+}
+
+*/
+
 void loop() {
   /*
   We are going to create an array that will hold the values of each sensor.
@@ -60,8 +70,7 @@ void loop() {
 */
   int sum = 0;
   float avg = 0;
-
-
+  
   sensArr[0] = analogRead(analogPin1);  //N
   sensArr[1] = analogRead(analogPin2);  //E
   sensArr[2] = analogRead(analogPin3);  //S
@@ -81,27 +90,19 @@ void loop() {
       digitalWrite(cardinalPins[i], LOW);
     }
   }
+  //Ammending the repetitive code
+  digitalWrite(NEPin, (sensArr[0] > avg && sensArr[1] > avg) ? HIGH : LOW);
+  digitalWrite(SEPin, (sensArr[1] > avg && sensArr[2] > avg) ? HIGH : LOW);
+  digitalWrite(SWPin, (sensArr[2] > avg && sensArr[3] > avg) ? HIGH : LOW);
+  digitalWrite(NWPin, (sensArr[3]] > avg && sensArr[0] > avg) ? HIGH : LOW);
 
-  if ((sensArr[0] > avg) && (sensArr[1] > avg)) {
-    digitalWrite(NEPin, HIGH);
-  } else {
-    digitalWrite(NEPin, LOW);
-  }
-  if ((sensArr[1] > avg) && (sensArr[2] > avg)) {
-    digitalWrite(SEPin, HIGH);
-  } else {
-    digitalWrite(SEPin, LOW);
-  }
-  if ((sensArr[2] > avg) && (sensArr[3] > avg)) {
-    digitalWrite(SWPin, HIGH);
-  } else {
-    digitalWrite(SWPin, LOW);
-  }
-  if ((sensArr[3] > avg) && (sensArr[0] > avg)) {
-    digitalWrite(NWPin, HIGH);
-  } else {
-    digitalWrite(NWPin, LOW);
-  }
+  //Second Method, use the setDiagLED help method
+  /*
+  setDiagLED(NEPin, 0, 1, avg);
+  setDiagLED(SEPin, 0, 1, avg);
+  setDiagLED(SWPin, 0, 1, avg);
+  setDiagLED(NWPin, 0, 1, avg);
+  */
 
-  delay(1000);
+  delay(250);
 }
