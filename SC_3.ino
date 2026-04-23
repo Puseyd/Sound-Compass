@@ -19,12 +19,6 @@ const int SWPin = 10;
 const int NWPin = 12;
 const int threshold = 390;
 
-const int powerButton = 2;
-const int powerOn = 3;
-
-int powerSensing = 0;
-int powerCount = 0;
-
 int N = 0;  //sensorVal1
 int E = 0;  //sensorVal2
 int S = 0;  //sensorVal3
@@ -47,10 +41,6 @@ void setup() {
   pinMode(SEPin, OUTPUT);
   pinMode(SWPin, OUTPUT);
   pinMode(NWPin, OUTPUT);
-
-  pinMode(powerButton, INPUT);
-  pinMode(powerOn, OUTPUT);
-  
   Serial.begin(9600);
 
   //int max = max(a, b);
@@ -80,16 +70,6 @@ void loop() {
   int sum = 0;
   float avg = 0;
 
-  powerSensing = digitalRead(powerButton);
-  if (powerSensing == HIGH) {
-    powerCount++;
-  }
-  if (powerCount & 2 == 1) {
-    powerOn == HIGH;
-  } else {
-    powerOn == LOW;
-  }
-  
   sensArr[0] = analogRead(analogPin1);  //N
   sensArr[1] = analogRead(analogPin2);  //E
   sensArr[2] = analogRead(analogPin3);  //S
@@ -113,7 +93,7 @@ void loop() {
   digitalWrite(NEPin, (sensArr[0] > avg && sensArr[1] > avg) ? HIGH : LOW);
   digitalWrite(SEPin, (sensArr[1] > avg && sensArr[2] > avg) ? HIGH : LOW);
   digitalWrite(SWPin, (sensArr[2] > avg && sensArr[3] > avg) ? HIGH : LOW);
-  digitalWrite(NWPin, (sensArr[3]] > avg && sensArr[0] > avg) ? HIGH : LOW);
+  digitalWrite(NWPin, (sensArr[3] > avg && sensArr[0] > avg) ? HIGH : LOW);
 
   //Second Method, use the setDiagLED help method
   /*
